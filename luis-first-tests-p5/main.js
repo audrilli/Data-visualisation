@@ -1,12 +1,9 @@
-let circleBig = 100;
-
 const settings = {
   circleSize: 40,
   strokeWidth: 3,
-  triangleSize: 100,
+  triangleSize: 20,
   fontSize: "9px",
 };
-
 
 function listenToTokens() {
   const { wsPort } = Osc();
@@ -25,10 +22,6 @@ function listenToTokens() {
   });
 }
 
-function easyCircle(){
-  
-}
-
 function drawSVG() {
   // creating an svg within the div with id #d3
   const svg = d3
@@ -42,33 +35,19 @@ function drawSVG() {
   const indicatorGroup = svg.append("g").attr("id", "indicator");
   const rotatingGroup = indicatorGroup.append("g").attr("id", "rotate");
 
-  const triangle = d3.symbol().type(d3.symbolSquare).size(settings.triangleSize);
+  const triangle = d3.symbol().type(d3.symbolTriangle).size(settings.triangleSize);
 
-  const { wsPort } = Osc();
-
-  console.log("wsPort: ", wsPort);
-
-  // receiving token data
-  wsPort.on("updateDevice", (data) => {
-    // data.x and data.y are values between 0–1
-
-     // using the same svg selection from before and adding a line
+  // using the same svg selection from before and adding a line
   rotatingGroup
-  .append("circle")
-  .style("stroke", "red")
-  .style("stroke-width", settings.strokeWidth)
-  .style("fill", "black")
+    .append("circle")
+    .style("stroke", "#0022ff")
+    .style("stroke-width", settings.strokeWidth)
+    .style("fill", "transparent")
 
-  .attr("r", data.rotation)
-  .attr("cx", 0)
-  .attr("cy", 0)
-  .style("fill", "noFill");
+    .attr("r", settings.circleSize)
+    .attr("cx", 0)
+    .attr("cy", 0);
 
-
-  });
-
-
- 
   rotatingGroup
     .append("path")
     .attr("d", triangle)
@@ -81,8 +60,10 @@ function drawSVG() {
     .attr("id", "indicator-text")
     .attr("font-size", settings.fontSize)
     .attr("text-anchor", "middle")
-    .attr("x", 0).attr("y", 0)
-    .style("fill", "red").text("0°");
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("fill", "#000")
+    .text("0°");
 }
 
 function updateText(text) {
