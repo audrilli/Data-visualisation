@@ -1,3 +1,6 @@
+let normalizedXPos;
+let normalizedYPos;
+
 let maxSize = 100;
 let minSize = 25;
 
@@ -18,8 +21,8 @@ function listenToTokens() {
     // receiving token data
     wsPort.on("updateDevice", (data) => {
         // data.x and data.y are values between 0–1
-        const normalizedXPos = window.innerWidth * data.x;
-        const normalizedYPos = window.innerHeight * data.y;
+        normalizedXPos = window.innerWidth * data.x;
+        normalizedYPos = window.innerHeight * data.y;
 
         let HotspotValue;
         if (data.rotation > 180) {
@@ -49,7 +52,7 @@ function listenToTokens() {
             belowValue = mapValue(data.rotation, 0, 180, belowMin, belowMax);
         }
 
-        // const mappedValue = mapValue(data.rotation, 0, 360, 30, 150);
+
 
         moveSVG('#rainforest', normalizedXPos, normalizedYPos);
         scale('#scalerainforest circle', HotspotValue);
@@ -57,6 +60,13 @@ function listenToTokens() {
         scale('#co2indicator circle', co2Value);
         scale('#aboveindicator circle', aboveValue);
         scale('#belowindicator circle', belowValue);
+
+        connectSVG('#dashyindicator1 line', normalizedXPos, normalizedYPos);
+        connectSVG('#dashyindicator2 line', normalizedXPos, normalizedYPos);
+        connectSVG('#dashyindicator3 line', normalizedXPos, normalizedYPos);
+
+
+
 
 
 
@@ -79,8 +89,38 @@ function drawSVG() {
     const carbonAbove = svg.append("g").attr("id", "aboveindicator");
     const carbonBelow = svg.append("g").attr("id", "belowindicator");
 
+    const dashedline1 = svg.append("g").attr("id", "dashyindicator1");
+    const dashedline2 = svg.append("g").attr("id", "dashyindicator2");
+    const dashedline3 = svg.append("g").attr("id", "dashyindicator3");
 
-    //const innerCircleGroup2 = CarbonDioxid.append("g").attr("id", "scaleindicator2");
+
+
+    dashedline1
+        .append("line")
+        .style("stroke", "white")
+        .style("stroke-width", 3)
+        .attr("x1", 240)
+        .attr("y1", window.innerHeight / 2)
+        .attr("x2", 0)
+        .attr("y2", 0);
+
+    dashedline2
+        .append("line")
+        .style("stroke", "white")
+        .style("stroke-width", 3)
+        .attr("x1", window.innerWidth - 240)
+        .attr("y1", 200)
+        .attr("x2", 0)
+        .attr("y2", 0);
+
+    dashedline3
+        .append("line")
+        .style("stroke", "white")
+        .style("stroke-width", 3)
+        .attr("x1", window.innerWidth - 240)
+        .attr("y1", window.innerHeight - 200)
+        .attr("x2", 0)
+        .attr("y2", 0);
 
     hotspot1
         .append("circle")
@@ -131,8 +171,7 @@ function drawSVG() {
 
         .attr("r", 100)
         .attr("cx", window.innerWidth - 240)
-        .attr("cy", window.innerHeight -200);
-
+        .attr("cy", window.innerHeight - 200);
 }
 
 function moveSVG(selector, x, y) {
@@ -142,6 +181,16 @@ function moveSVG(selector, x, y) {
         .duration(300)
         .ease(d3.easeLinear)
         .attr("transform", () => `translate(${x}, ${y})`);
+}
+
+function connectSVG(selector, x, y) {
+    const connect = d3
+        .select(selector)
+        .transition()
+        .duration(300)
+        .ease(d3.easeLinear)
+        .attr("x2", x)
+        .attr("y2", y);
 }
 
 function scale(selector, rotation) {
