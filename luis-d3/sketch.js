@@ -1,24 +1,24 @@
 let normalizedXPos;
 let normalizedYPos;
 
-let maxSize = 100;
-let minSize = 25;
+let maxSize = 500;
+let minSize = 250;
 
-let co2Max = 180;
-let co2Min = 140;
-let co2Xposition = 240;
+let co2Max = 350;
+let co2Min = 210;
+let co2Xposition = 600;
 let co2Yposition = window.innerHeight / 2;
 
+let aboveMax = 350;
+let aboveMin = 230;
+let aboveXposition = window.innerWidth - 600;
+let aboveYposition = 400;
 
-let aboveMax = 150;
-let aboveMin = 80;
-let aboveXposition = window.innerWidth - 240;
-let aboveYposition = 200;
+let belowMax = 490;
+let belowMin = 350;
+let belowXposition = window.innerWidth - 800;
+let belowYposition = window.innerHeight - 800;
 
-let belowMax = 180;
-let belowMin = 150;
-let belowXposition = window.innerWidth - 240;
-let belowYposition = window.innerHeight - 200;
 
 function listenToTokens() {
     const { wsPort } = Osc();
@@ -72,11 +72,6 @@ function listenToTokens() {
         connectSVG('#dashyindicator2 line', normalizedXPos, normalizedYPos);
         connectSVG('#dashyindicator3 line', normalizedXPos, normalizedYPos);
 
-
-
-
-
-
     });
 }
 
@@ -89,8 +84,8 @@ function drawSVG() {
         .attr("width", window.innerWidth)
         .attr("height", window.innerHeight);
 
-    const hotspot1 = svg.append("g").attr("id", "rainforest");
-    const currentHotspot1 = hotspot1.append("g").attr("id", "scalerainforest");
+    const hotspot = svg.append("g").attr("id", "rainforest");
+    const currentHotspot = hotspot.append("g").attr("id", "scalerainforest");
 
     const co2Circle = svg.append("g").attr("id", "co2indicator");
     const carbonAbove = svg.append("g").attr("id", "aboveindicator");
@@ -100,12 +95,17 @@ function drawSVG() {
     const dashedline2 = svg.append("g").attr("id", "dashyindicator2");
     const dashedline3 = svg.append("g").attr("id", "dashyindicator3");
 
-
+    let strokeDash = "5, 10";
+    let strokeThickness = 2;
 
     dashedline1
         .append("line")
         .style("stroke", "white")
-        .style("stroke-width", 3)
+        .style("stroke-width", strokeThickness)
+        .attr("stroke-dasharray", strokeDash)
+        .attr("stroke-linecap", "round")
+        .attr("stroke-opacity", "40%")
+
         .attr("x1", co2Xposition)
         .attr("y1", co2Yposition)
         .attr("x2", 0)
@@ -114,7 +114,11 @@ function drawSVG() {
     dashedline2
         .append("line")
         .style("stroke", "white")
-        .style("stroke-width", 3)
+        .style("stroke-width", strokeThickness)
+        .attr("stroke-dasharray", strokeDash)
+        .attr("stroke-linecap", "round")
+        .attr("stroke-opacity", "40%")
+
         .attr("x1", aboveXposition)
         .attr("y1", aboveYposition)
         .attr("x2", 0)
@@ -123,28 +127,51 @@ function drawSVG() {
     dashedline3
         .append("line")
         .style("stroke", "white")
-        .style("stroke-width", 3)
+        .style("stroke-width", strokeThickness)
+        .attr("stroke-dasharray", strokeDash)
+        .attr("stroke-linecap", "round")
+        .attr("stroke-opacity", "40%")
+
         .attr("x1", belowXposition)
         .attr("y1", belowYposition)
         .attr("x2", 0)
         .attr("y2", 0);
 
-    hotspot1
+    hotspot
         .append("circle")
         .style("stroke", "white")
-        .style("stroke-width", 3)
+        .style("stroke-width", 4)
         .style("fill", "transparent")
+        .attr("stroke-dasharray", "5, 15")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-dashoffset", "15%")
 
         .attr("r", maxSize)
         .attr("cx", 0)
         .attr("cy", 0);
 
-    currentHotspot1
+    hotspot
         .append("circle")
-        //.attr("class", "inner") //oben scalerainforest .inner
-        .style("stroke", "red")
+        .style("fill", "black")
+        .attr("opacity", "40%")
+        .attr("r", 150)
+        .attr("cx", 0)
+        .attr("cy", 0);
+
+    hotspot
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", 0)
+        .attr("y", +10)
+        .attr("fill", "white")
+        .text("Place Token")
+
+    currentHotspot
+        .append("circle")
+        .style("stroke", "white")
         .style("stroke-width", 3)
-        .style("fill", "transparent")
+        .style("fill", "url(#hotspot-gradient)")
 
         .attr("r", minSize)
         .attr("cx", 0)
@@ -152,9 +179,9 @@ function drawSVG() {
 
     co2Circle
         .append("circle")
-        .style("stroke", "#0022ff")
+        .style("stroke", "white")
         .style("stroke-width", 3)
-        .style("fill", "transparent")
+        .style("fill", "url(#void-gradient)")
 
         .attr("r", 100)
         .attr("cx", co2Xposition)
@@ -162,9 +189,9 @@ function drawSVG() {
 
     carbonAbove
         .append("circle")
-        .style("stroke", "#0022ff")
+        .style("stroke", "white")
         .style("stroke-width", 3)
-        .style("fill", "transparent")
+        .style("fill", "url(#void-gradient)")
 
         .attr("r", 100)
         .attr("cx", aboveXposition)
@@ -172,29 +199,68 @@ function drawSVG() {
 
     carbonBelow
         .append("circle")
-        .style("stroke", "#0022ff")
+        .style("stroke", "white")
         .style("stroke-width", 3)
-        .style("fill", "transparent")
+        .style("fill", "url(#void-gradient)")
 
         .attr("r", 100)
         .attr("cx", belowXposition)
         .attr("cy", belowYposition);
+
+
+
+    var hotspotbubble = hotspot.append("defs");
+    hotspotbubble.append("radialGradient")
+        .attr("id", "hotspot-gradient")
+        .attr("cx", "50%")
+        .attr("cy", "50%")
+        .attr("r", "50%")
+        .selectAll("stop")
+        .data([
+            { offset: "60%", color: "#2B6D2F" },
+            { offset: "75%", color: "#2B6D2F" },
+            { offset: "98%", color: "#1A331C" },
+            { offset: "100%", color: "#04001e" }
+        ])
+        .enter().append("stop")
+        .attr("offset", function (d) { return d.offset; })
+        .attr("stop-color", function (d) { return d.color; });
+
+    var voidbubble = hotspot.append("defs");
+    voidbubble.append("radialGradient")
+        .attr("id", "void-gradient")
+        .attr("cx", "50%")
+        .attr("cy", "50%")
+        .attr("r", "50%")
+        .selectAll("stop")
+        .data([
+            { offset: "60%", color: "#04001e" },
+            { offset: "80%", color: "#191930" },
+            { offset: "98%", color: "#9491BF" },
+            { offset: "100%", color: "white" }
+        ])
+        .enter().append("stop")
+        .attr("offset", function (d) { return d.offset; })
+        .attr("stop-color", function (d) { return d.color; });
 }
+
+///////////////////INTERACTIONS///////////////////////////////////
 
 function moveSVG(selector, x, y) {
     const movement = d3
         .select(selector)
         .transition()
-        .duration(300)
+        .duration(50)
         .ease(d3.easeLinear)
         .attr("transform", () => `translate(${x}, ${y})`);
 }
 
 function connectSVG(selector, x, y) {
+
     const connect = d3
         .select(selector)
         .transition()
-        .duration(300)
+        .duration(50)
         .ease(d3.easeLinear)
         .attr("x2", x)
         .attr("y2", y);
