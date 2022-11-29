@@ -14,6 +14,14 @@ svg.append('circle')
   .attr('stroke', 'black')
   .attr('fill', '#69a3b2');
 
+  // Add the path 
+svg.append('circle')
+.attr('cx', 300)
+.attr('cy', 300)
+.attr('r', 20)
+.attr('stroke', 'black')
+.attr('fill', '#69a3b2');
+
   // https://hammerjs.github.io/getting-started/
   
   const hammerPlayground = document.getElementById('hammer');
