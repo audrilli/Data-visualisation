@@ -6,12 +6,19 @@ let minSize = 25;
 
 let co2Max = 180;
 let co2Min = 140;
+let co2Xposition = 240;
+let co2Yposition = window.innerHeight / 2;
+
 
 let aboveMax = 150;
 let aboveMin = 80;
+let aboveXposition = window.innerWidth - 240;
+let aboveYposition = 200;
 
 let belowMax = 180;
 let belowMin = 150;
+let belowXposition = window.innerWidth - 240;
+let belowYposition = window.innerHeight - 200;
 
 function listenToTokens() {
     const { wsPort } = Osc();
@@ -85,7 +92,7 @@ function drawSVG() {
     const hotspot1 = svg.append("g").attr("id", "rainforest");
     const currentHotspot1 = hotspot1.append("g").attr("id", "scalerainforest");
 
-    const carbonDioxid = svg.append("g").attr("id", "co2indicator");
+    const co2Circle = svg.append("g").attr("id", "co2indicator");
     const carbonAbove = svg.append("g").attr("id", "aboveindicator");
     const carbonBelow = svg.append("g").attr("id", "belowindicator");
 
@@ -99,8 +106,8 @@ function drawSVG() {
         .append("line")
         .style("stroke", "white")
         .style("stroke-width", 3)
-        .attr("x1", 240)
-        .attr("y1", window.innerHeight / 2)
+        .attr("x1", co2Xposition)
+        .attr("y1", co2Yposition)
         .attr("x2", 0)
         .attr("y2", 0);
 
@@ -108,8 +115,8 @@ function drawSVG() {
         .append("line")
         .style("stroke", "white")
         .style("stroke-width", 3)
-        .attr("x1", window.innerWidth - 240)
-        .attr("y1", 200)
+        .attr("x1", aboveXposition)
+        .attr("y1", aboveYposition)
         .attr("x2", 0)
         .attr("y2", 0);
 
@@ -117,8 +124,8 @@ function drawSVG() {
         .append("line")
         .style("stroke", "white")
         .style("stroke-width", 3)
-        .attr("x1", window.innerWidth - 240)
-        .attr("y1", window.innerHeight - 200)
+        .attr("x1", belowXposition)
+        .attr("y1", belowYposition)
         .attr("x2", 0)
         .attr("y2", 0);
 
@@ -143,15 +150,15 @@ function drawSVG() {
         .attr("cx", 0)
         .attr("cy", 0);
 
-    carbonDioxid
+    co2Circle
         .append("circle")
         .style("stroke", "#0022ff")
         .style("stroke-width", 3)
         .style("fill", "transparent")
 
         .attr("r", 100)
-        .attr("cx", 240)
-        .attr("cy", window.innerHeight / 2);
+        .attr("cx", co2Xposition)
+        .attr("cy", co2Yposition);
 
     carbonAbove
         .append("circle")
@@ -160,8 +167,8 @@ function drawSVG() {
         .style("fill", "transparent")
 
         .attr("r", 100)
-        .attr("cx", window.innerWidth - 240)
-        .attr("cy", 200);
+        .attr("cx", aboveXposition)
+        .attr("cy", aboveYposition);
 
     carbonBelow
         .append("circle")
@@ -170,8 +177,8 @@ function drawSVG() {
         .style("fill", "transparent")
 
         .attr("r", 100)
-        .attr("cx", window.innerWidth - 240)
-        .attr("cy", window.innerHeight - 200);
+        .attr("cx", belowXposition)
+        .attr("cy", belowYposition);
 }
 
 function moveSVG(selector, x, y) {
