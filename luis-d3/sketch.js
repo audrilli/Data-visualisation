@@ -34,7 +34,6 @@ function drawSVG() {
     const CircleGroup2 = svg.append("g").attr("id", "circleonegroupindicator2");
     const innerCircleGroup2 = CircleGroup2.append("g").attr("id", "scaleindicator2");
 
-
     CircleGroup1
         .append("circle")
         .style("stroke", "#0022ff")
