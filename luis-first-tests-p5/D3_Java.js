@@ -13,8 +13,11 @@ function listenToTokens() {
         // moveSVG(normalizedXPos, normalizedYPos);
         //rotateSVG(data.rotation);
         // updateText(Math.round(data.rotation));
-        moveSVG('#circleonegroupindicator', normalizedXPos, normalizedYPos);
-        scale('#scaleindicator', data.rotation);
+        moveSVG('#circlegroupindicator1', normalizedXPos, normalizedYPos);
+        scale('#scaleindicator1', data.rotation);
+
+        moveSVG('#circleonegroupindicator2', 200, 200);
+        scale('#scaleindicator2', data.rotation/2);
         // scale('#circleonegroupindicator2', data.rotation);
         // scale('#circleonegroupindicator3', data.rotation);
     });
@@ -29,10 +32,12 @@ function drawSVG() {
         .attr("width", window.innerWidth)
         .attr("height", window.innerHeight);
 
-    const CircleOneGroup = svg.append("g").attr("id", "circleonegroupindicator");
-    const innerCircleGroup1 = CircleOneGroup.append("g").attr("id", "scaleindicator");
+    const CircleGroup1 = svg.append("g").attr("id", "circlegroupindicator1");
+    const innerCircleGroup1 = CircleGroup1.append("g").attr("id", "scaleindicator1");
     //firstGroup = svg.append("g").attr("id", "circleonegroupindicator");
-    const Circle2Group = svg.append("g").attr("id", "circleonegroupindicator2");
+    const CircleGroup2 = svg.append("g").attr("id", "circleonegroupindicator2");
+    const innerCircleGroup2 = CircleGroup2.append("g").attr("id", "scaleindicator2");
+
     const Circle3Group = svg.append("g").attr("id", "circleonegroupindicator3");
     //const rotatingGroup = indicatorGroup.append("g").attr("id", "rotate");
 
@@ -46,7 +51,7 @@ function drawSVG() {
     //     .attr("cx", 0)
     //     .attr("cy", 0);
 
-    CircleOneGroup
+    CircleGroup1
         .append("circle")
         .style("stroke", "#0022ff")
         .style("stroke-width", 3)
@@ -65,6 +70,28 @@ function drawSVG() {
         .attr("r", 20)
         .attr("cx", 0)
         .attr("cy", 0);
+
+
+    CircleGroup2
+        .append("circle")
+        .style("stroke", "#0022ff")
+        .style("stroke-width", 3)
+        .style("fill", "transparent")
+
+        .attr("r", 100)
+        .attr("cx", 0)
+        .attr("cy", 0);
+
+    innerCircleGroup2
+        .append("circle")
+        .style("stroke", "red")
+        .style("stroke-width", 3)
+        .style("fill", "transparent")
+
+        .attr("r", 20)
+        .attr("cx", 0)
+        .attr("cy", 0);
+
 }
 
 function moveSVG(selector, x, y) {
@@ -76,20 +103,11 @@ function moveSVG(selector, x, y) {
         .attr("transform", () => `translate(${x}, ${y})`);
 }
 
-// function scale(){
-//     const circleGroup = d3
-//         .select('#circleonegroupindicator')
-//         .transition()
-//         .duration(300)
-//         .ease(d3.easeLinear)
-//         .attr("transform", "scale(2)");
-// }
-
-function scale(selectorRot, rotation){
+function scale(selector, rotation) {
     const scaleValue = rotation / 100;
 
     const circleGroup = d3
-        .select(selectorRot)
+        .select(selector)
         .transition()
         .duration(300)
         .ease(d3.easeLinear)
