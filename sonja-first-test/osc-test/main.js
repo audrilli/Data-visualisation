@@ -1,23 +1,3 @@
-// var dataArray = [20, 40, 50];
-
-// var canvas = d3
-//   .select("body")
-//   .append("svg")
-//   .attr("width", windowWidth)
-//   .attr("height", windowHeight);
-
-// var bars = canvas
-//   .selectAll("circle")
-//   .data(dataArray)
-//   .enter()
-//   .append("circle")
-//   .attr("width", function (d) {
-//     return d;
-//   })
-//   .attr("height", 50)
-//   .attr("y", function (d, i) {
-//     return i * 100;
-//   });
 
 // create svg element:
 var svg = d3
@@ -34,15 +14,32 @@ svg.append('circle')
   .attr('stroke', 'black')
   .attr('fill', '#69a3b2');
 
-svg.append('rect')
-  .attr('x', 10)
-  .attr('y', 150)
-  .attr('width', 300)
-  .attr('height', 40)
-  .attr('stroke', 'black')
-  .attr('fill', '#69a3b2');
-
-
+  // https://hammerjs.github.io/getting-started/
+  
+  const hammerPlayground = document.getElementById('hammer');
+  const hammerOptions = {};
+  const mc = new Hammer(hammerPlayground, hammerOptions);
+  
+  // listen to pan, tap, press events
+  mc.on('panleft panright tap press', (event) => {
+    hammerPlayground.textContent = event.type + ' gesture detected.';
+  });
+  
+  // listen to a single event: minimal 2 taps
+  mc.on('singletap doubletap', (event) => {
+    hammerPlayground.textContent = event.type + ' ';
+    console.log('event: ', event);
+  });
+  
+  // enabling rotate recognizer
+  // https://hammerjs.github.io/recognizer-rotate/
+  mc.get('rotate').set({ enable: true });
+  
+  // only detectable on touch devices
+  mc.on('rotate', (event) => {
+    hammerPlayground.textContent = event.type + ' ';
+    hammerPlayground.textContent += `<br> ${event}`;
+  });
   
 
 

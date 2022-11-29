@@ -2,12 +2,22 @@
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  box-sizing: border-box;
 }
 
 body {
   background-color: #f3e4ce;
+  height: 100vh;
 }
 
 svg {
   width: 100%;
+}
+
+.hammer-playground {
+  width: 95%;
+  height: 95%;
+  margin: 20px auto;
+  background-color: rgb(224, 241, 235);
+  padding: 20px;
 }
