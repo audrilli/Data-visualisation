@@ -1,97 +1,3 @@
-// const settings = {
-//     circleSize: 40,
-//     strokeWidth: 3,
-//     triangleSize: 20,
-//     fontSize: "9px",
-//   };
-
-//   function listenToTokens() {
-//     const { wsPort } = Osc();
-
-//     console.log("wsPort: ", wsPort);
-
-//     // receiving token data
-//     wsPort.on("updateDevice", (data) => {
-//       // data.x and data.y are values between 0–1
-//       const normalizedXPos = window.innerWidth * data.x;
-//       const normalizedYPos = window.innerHeight * data.y;
-
-//       moveSVG(normalizedXPos, normalizedYPos);
-//       rotateSVG(data.rotation);
-//       updateText(Math.round(data.rotation));
-//     });
-//   }
-
-//   function drawSVG() {
-//     // creating an svg within the div with id #d3
-//     const svg = d3
-//       .select("#d3")
-//       .append("svg")
-//       .attr("width", window.innerWidth)
-//       .attr("height", window.innerHeight);
-
-//     // creating a <g> group tag
-//     const indicatorGroup = svg.append("g").attr("id", "indicator");
-//     const rotatingGroup = indicatorGroup.append("g").attr("id", "rotate");
-
-//     const triangle = d3.symbol().type(d3.symbolTriangle).size(settings.triangleSize);
-
-//     // using the same svg selection from before and adding a line
-//     rotatingGroup
-//       .append("circle")
-//       .style("stroke", "#0022ff")
-//       .style("stroke-width", settings.strokeWidth)
-//       .style("fill", "transparent")
-
-//       .attr("r", settings.circleSize)
-//       .attr("cx", 0)
-//       .attr("cy", 0);
-
-//     rotatingGroup
-//       .append("path")
-//       .attr("d", triangle)
-//       .attr("stroke", "#0022ff")
-//       .attr("fill", "#0022ff")
-//       .attr("transform", `translate(0, -${settings.circleSize + settings.strokeWidth})`);
-
-//     indicatorGroup
-//       .append("text")
-//       .attr("id", "indicator-text")
-//       .attr("font-size", settings.fontSize)
-//       .attr("text-anchor", "middle")
-//       .attr("x", 0)
-//       .attr("y", 0)
-//       .attr("fill", "#000")
-//       .text("0°");
-//   }
-
-//   function updateText(text) {
-//     const circleText = d3
-//     .select("#indicator-text")
-//     .text(`${text} °`);
-//   }
-
-//   function moveSVG(x, y) {
-//     const indicator = d3
-//       .select("#indicator")
-//       .transition()
-//       .duration(500)
-//       .ease(d3.easeLinear)
-//       .attr("transform", () => `translate(${x}, ${y})`);
-//   }
-
-//   function rotateSVG(degrees) {
-//     const rotator = d3
-//       .select("#rotate")
-//       .transition()
-//       .duration(500)
-//       .ease(d3.easeLinear)
-//       .attr("transform", () => `rotate(${degrees})`);
-//   }
-
-//   drawSVG();
-//   listenToTokens();
-
 
 function listenToTokens() {
     const { wsPort } = Osc();
@@ -104,16 +10,18 @@ function listenToTokens() {
         const normalizedXPos = window.innerWidth * data.x;
         const normalizedYPos = window.innerHeight * data.y;
 
-        moveSVG(normalizedXPos, normalizedYPos);
-        rotateSVG(data.rotation);
+        // moveSVG(normalizedXPos, normalizedYPos);
+        //rotateSVG(data.rotation);
         // updateText(Math.round(data.rotation));
+        moveSVG('#circleonegroupindicator', normalizedXPos, normalizedYPos);
+        scale('#scaleindicator', data.rotation);
+        // scale('#circleonegroupindicator2', data.rotation);
+        // scale('#circleonegroupindicator3', data.rotation);
     });
 }
 
 
 function drawSVG() {
-
-
 
     const svg = d3
         .select("#d3")
@@ -121,11 +29,25 @@ function drawSVG() {
         .attr("width", window.innerWidth)
         .attr("height", window.innerHeight);
 
-    const indicatorGroup = svg.append("g").attr("id", "indicator");
+    const CircleOneGroup = svg.append("g").attr("id", "circleonegroupindicator");
+    const innerCircleGroup1 = CircleOneGroup.append("g").attr("id", "scaleindicator");
+    //firstGroup = svg.append("g").attr("id", "circleonegroupindicator");
+    const Circle2Group = svg.append("g").attr("id", "circleonegroupindicator2");
+    const Circle3Group = svg.append("g").attr("id", "circleonegroupindicator3");
+    //const rotatingGroup = indicatorGroup.append("g").attr("id", "rotate");
 
+    // d3.select('#circleonegroupindicator')
+    //     .append("circle")
+    //     .style("stroke", "#0022ff")
+    //     .style("stroke-width", 3)
+    //     .style("fill", "transparent")
 
+    //     .attr("r", 100)
+    //     .attr("cx", 0)
+    //     .attr("cy", 0);
 
-    indicatorGroup.append("circle")
+    CircleOneGroup
+        .append("circle")
         .style("stroke", "#0022ff")
         .style("stroke-width", 3)
         .style("fill", "transparent")
@@ -133,25 +55,46 @@ function drawSVG() {
         .attr("r", 100)
         .attr("cx", 0)
         .attr("cy", 0);
+
+    innerCircleGroup1
+        .append("circle")
+        .style("stroke", "red")
+        .style("stroke-width", 3)
+        .style("fill", "transparent")
+
+        .attr("r", 20)
+        .attr("cx", 0)
+        .attr("cy", 0);
 }
 
-function moveSVG(x, y) {
+function moveSVG(selector, x, y) {
     const movement = d3
-        .select("#indicator")
+        .select(selector)
         .transition()
         .duration(300)
         .ease(d3.easeLinear)
         .attr("transform", () => `translate(${x}, ${y})`);
 }
 
-// function rotateSVG(degrees) {
-//     const rotator = d3
-//         .select("#rotate")
+// function scale(){
+//     const circleGroup = d3
+//         .select('#circleonegroupindicator')
 //         .transition()
-//         .duration(500)
+//         .duration(300)
 //         .ease(d3.easeLinear)
+//         .attr("transform", "scale(2)");
 // }
+
+function scale(selectorRot, rotation){
+    const scaleValue = rotation / 100;
+
+    const circleGroup = d3
+        .select(selectorRot)
+        .transition()
+        .duration(300)
+        .ease(d3.easeLinear)
+        .attr("transform", `scale(${scaleValue})`);
+}
 
 listenToTokens();
 drawSVG();
-
