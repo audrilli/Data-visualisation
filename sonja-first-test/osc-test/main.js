@@ -18,7 +18,7 @@ svg.append('circle')
 
 // https://hammerjs.github.io/getting-started/
 
-// var myElement = document.getElementById('circle1');
+//  var myElement = document.getElementById('circle1');
 
 
 // var hammertime = new Hammer(myElement);
@@ -52,13 +52,20 @@ svg.append('circle')
   var statusBar = document.getElementById('status');
   
   // create a simple instance on our object
-  var mc = new Hammer(myElement);
+  var hammertime = new Hammer(myElement);
+  hammertime.on('pan', function(ev) {
+    	console.log(ev);
+   });
+
+  hammertime.on("panleft panright tap press", function(ev) {
+  myElement.textContent = ev.type +" gesture detected.";
+});
   
   // add a "PAN" recognizer to it (all directions)
-  mc.add( new Hammer.Pan({ direction: Hammer.DIRECTION_ALL, threshold: 0 }) );
+  hammertime.add( new Hammer.Pan({ direction: Hammer.DIRECTION_ALL, threshold: 0 }) );
   
   // tie in the handler that will be called
-  mc.on("pan", handleDrag);
+  hammertime.on("pan", handleDrag);
   
   // poor choice here, but to keep it simple
   // setting up a few vars to keep track of things.
@@ -81,7 +88,7 @@ svg.append('circle')
       lastPosY = elem.offsetTop;
       setStatus("You, sir, are dragging me...");
       
-      setElementText("WOAH");
+     //setElementText("WOAH");
     }
     
     // we simply need to determine where the x,y of this
@@ -105,8 +112,6 @@ svg.append('circle')
       setBlockText("Thanks");
     }
   }
-  
-  
   
   function setStatus(msg) {
     statusBar.textContent = msg;
