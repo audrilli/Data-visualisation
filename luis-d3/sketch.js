@@ -199,7 +199,7 @@ function drawSVG() {
 
     carbonBelow
         .append("circle")
-        .style("stroke", "red")
+        .style("stroke", "white")
         .style("stroke-width", 3)
         .style("fill", "url(#void-gradient)")
 
