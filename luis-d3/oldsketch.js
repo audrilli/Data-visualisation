@@ -12,12 +12,12 @@ let co2Yposition = window.innerHeight / 2;
 let aboveMax = 500;
 let aboveMin = 230;
 let aboveXposition = window.innerWidth - 800;
-let aboveYposition = 700;
+let aboveYposition = 600;
 
 let belowMax = 360;
 let belowMin = 320;
 let belowXposition = window.innerWidth - 800;
-let belowYposition = window.innerHeight - 600;
+let belowYposition = window.innerHeight - 500;
 
 
 function listenToTokens() {
