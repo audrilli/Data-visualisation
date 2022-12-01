@@ -4,20 +4,20 @@ let normalizedYPos;
 let maxSize = 500;
 let minSize = 250;
 
-let co2Max = 350;
-let co2Min = 210;
+let co2Max = 400;
+let co2Min = 300;
 let co2Xposition = 600;
 let co2Yposition = window.innerHeight / 2;
 
-let aboveMax = 350;
+let aboveMax = 500;
 let aboveMin = 230;
-let aboveXposition = window.innerWidth - 600;
-let aboveYposition = 400;
+let aboveXposition = window.innerWidth - 800;
+let aboveYposition = 700;
 
-let belowMax = 490;
-let belowMin = 350;
+let belowMax = 360;
+let belowMin = 320;
 let belowXposition = window.innerWidth - 800;
-let belowYposition = window.innerHeight - 800;
+let belowYposition = window.innerHeight - 600;
 
 
 function listenToTokens() {
