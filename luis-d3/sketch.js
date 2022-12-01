@@ -4,20 +4,29 @@ let normalizedYPos;
 let maxSize = 500;
 let minSize = 250;
 
-let co2Max = 350;
-let co2Min = 210;
-let co2Xposition = 600;
-let co2Yposition = window.innerHeight / 2;
+let co2Max = 400;
+let co2Min = 300;
+let co2Xposition;
+let co2Yposition;
+// let co2Xposition = 600;
+// let co2Yposition = window.innerHeight / 2;
 
-let aboveMax = 350;
+let aboveMax = 500;
 let aboveMin = 230;
-let aboveXposition = window.innerWidth - 600;
-let aboveYposition = 400;
+let aboveXposition = 20;
+let aboveYposition = 20;
+// let aboveXposition = window.innerWidth - 600;
+// let aboveYposition = 400;
 
-let belowMax = 490;
-let belowMin = 350;
-let belowXposition = window.innerWidth - 800;
-let belowYposition = window.innerHeight - 800;
+let belowMax = 360;
+let belowMin = 320;
+let belowXposition = 50;
+let belowYposition = 50;
+// let belowXposition = window.innerWidth - 800;
+// let belowYposition = window.innerHeight - 800;
+
+let deltaX, deltaY;
+
 
 // let dragHandler;
 
@@ -70,10 +79,11 @@ function listenToTokens() {
         scale('#aboveindicator circle', aboveValue);
         scale('#belowindicator circle', belowValue);
 
-        connectSVG('#dashyindicator1 line', normalizedXPos, normalizedYPos);
-        connectSVG('#dashyindicator2 line', normalizedXPos, normalizedYPos);
-        connectSVG('#dashyindicator3 line', normalizedXPos, normalizedYPos);
+        rotateSVG('#rotatehot', HotspotValue);
 
+        // connectSVG('#dashyindicator1 line', normalizedXPos, normalizedYPos);
+        // connectSVG('#dashyindicator2 line', normalizedXPos, normalizedYPos);
+        // connectSVG('#dashyindicator3 line', normalizedXPos, normalizedYPos);
 
     });
 }
@@ -90,92 +100,111 @@ function drawSVG() {
 
     const hotspot = svg.append("g").attr("id", "rainforest");
     const currentHotspot = hotspot.append("g").attr("id", "scalerainforest");
+    const rotateHot = hotspot.append("g").attr("id", "rotatehot");
 
     const co2Circle = svg.append("g").attr("id", "co2indicator");
     const carbonAbove = svg.append("g").attr("id", "aboveindicator");
     const carbonBelow = svg.append("g").attr("id", "belowindicator");
 
-    const dashedline1 = svg.append("g").attr("id", "dashyindicator1");
-    const dashedline2 = svg.append("g").attr("id", "dashyindicator2");
-    const dashedline3 = svg.append("g").attr("id", "dashyindicator3");
+    // const dashedline1 = svg.append("g").attr("id", "dashyindicator1");
+    // const dashedline2 = svg.append("g").attr("id", "dashyindicator2");
+    // const dashedline3 = svg.append("g").attr("id", "dashyindicator3");
 
-    //const dragbubble = svg.append("g").attr("id", "dragindicator");
+
+
+
+
 
 
     var dragHandler = d3.drag()
         .on('drag', dragged)
-
-    // var circle = svg.append("circle")
-    // .attr("cx", 100)
-    // .attr("cy", 100)
-    // .attr('r', 50)
-    // .style("fill", "white");
-
-    //dragHandler(circle);
-
-    //dragged();
+    //.on("start", startfunc)
 
 
 
 
 
-    let strokeDash = "5, 10";
-    let strokeThickness = 2;
 
-    dashedline1
-        .append("line")
-        .style("stroke", "white")
-        .style("stroke-width", strokeThickness)
-        .attr("stroke-dasharray", strokeDash)
-        .attr("stroke-linecap", "round")
-        .attr("stroke-opacity", "40%")
-
-        .attr("x1", co2Xposition)
-        .attr("y1", co2Yposition)
-        .attr("x2", 0)
-        .attr("y2", 0);
-
-        //dragHandler(dashedline1);
-
-
-    dashedline2
-        .append("line")
-        .style("stroke", "white")
-        .style("stroke-width", strokeThickness)
-        .attr("stroke-dasharray", strokeDash)
-        .attr("stroke-linecap", "round")
-        .attr("stroke-opacity", "40%")
-
-        .attr("x1", aboveXposition)
-        .attr("y1", aboveYposition)
-        .attr("x2", 0)
-        .attr("y2", 0);
-
-    dashedline3
-        .append("line")
-        .style("stroke", "white")
-        .style("stroke-width", strokeThickness)
-        .attr("stroke-dasharray", strokeDash)
-        .attr("stroke-linecap", "round")
-        .attr("stroke-opacity", "40%")
-
-        .attr("x1", belowXposition)
-        .attr("y1", belowYposition)
-        .attr("x2", 0)
-        .attr("y2", 0);
-
-    hotspot
+    co2Circle
         .append("circle")
         .style("stroke", "white")
-        .style("stroke-width", 4)
-        .style("fill", "transparent")
-        .attr("stroke-dasharray", "5, 15")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-dashoffset", "15%")
+        .style("stroke-width", 3)
+        .style("fill", "url(#void-gradient)")
+        .attr("r", 100)
+        .attr("cx", co2Xposition)
+        .attr("cy", co2Yposition);
 
-        .attr("r", maxSize)
-        .attr("cx", 0)
-        .attr("cy", 0);
+    dragHandler(co2Circle);
+
+    co2Circle
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("fill", "white")
+        .text("CO2");
+    co2Circle
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", 0)
+        .attr("y", 45)
+        .attr("fill", "white")
+        .text("in the air");
+
+    // let strokeDash = "5, 10";
+    // let strokeThickness = 2;
+
+    // dashedline1
+    //     .append("line")
+    //     .style("stroke", "white")
+    //     .style("stroke-width", strokeThickness)
+    //     .attr("stroke-dasharray", strokeDash)
+    //     .attr("stroke-linecap", "round")
+    //     .attr("stroke-opacity", "40%")
+
+    //     .attr("x1", co2Xposition)
+    //     .attr("y1", co2Yposition)
+    //     .attr("x2", 0)
+    //     .attr("y2", 0);
+
+    // dashedline2
+    //     .append("line")
+    //     .style("stroke", "white")
+    //     .style("stroke-width", strokeThickness)
+    //     .attr("stroke-dasharray", strokeDash)
+    //     .attr("stroke-linecap", "round")
+    //     .attr("stroke-opacity", "40%")
+    //     .attr("x1", aboveXposition)
+    //     .attr("y1", aboveYposition)
+    //     .attr("x2", 0)
+    //     .attr("y2", 0);
+
+    // dashedline3
+    //     .append("line")
+    //     .style("stroke", "white")
+    //     .style("stroke-width", strokeThickness)
+    //     .attr("stroke-dasharray", strokeDash)
+    //     .attr("stroke-linecap", "round")
+    //     .attr("stroke-opacity", "40%")
+    //     .attr("x1", belowXposition)
+    //     .attr("y1", belowYposition)
+    //     .attr("x2", 0)
+    //     .attr("y2", 0);
+
+    // hotspot
+    //     .append("circle")
+    //     .style("stroke", "white")
+    //     .style("stroke-width", 4)
+    //     .style("fill", "transparent")
+    //     .attr("stroke-dasharray", "5, 40")
+    //     .attr("stroke-linecap", "round")
+    //     .attr("stroke-dashoffset", "15%")
+
+    //     .attr("r", maxSize)
+    //     .attr("cx", 0)
+    //     .attr("cy", 0);
 
     hotspot
         .append("circle")
@@ -204,18 +233,26 @@ function drawSVG() {
         .attr("cx", 0)
         .attr("cy", 0);
 
-    co2Xposition = 0;
-    co2Yposition = 0;
-    co2Circle
+    rotateHot
         .append("circle")
         .style("stroke", "white")
-        .style("stroke-width", 3)
-        .style("fill", "url(#void-gradient)")
-        .attr("r", 100)
-        .attr("cx", co2Xposition)
-        .attr("cy", co2Yposition);
+        .style("stroke-width", 4)
+        .style("fill", "transparent")
+        .attr("stroke-dasharray", "5, 40")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-dashoffset", "15%")
 
-    dragHandler(co2Circle);
+        .attr("r", maxSize)
+        .attr("cx", 0)
+        .attr("cy", 0);
+    // .append("rect")
+    // .style("fill", "white")
+    // .attr("width", 30)
+    // .attr("height", 30)
+    // .attr("x", 50)
+    // .attr("y", 0);
+
+
 
 
 
@@ -229,6 +266,26 @@ function drawSVG() {
         .attr("cx", aboveXposition)
         .attr("cy", aboveYposition);
 
+    dragHandler(carbonAbove);
+
+    carbonAbove
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", 20)
+        .attr("y", 5)
+        .attr("fill", "white")
+        .text("CO2 Storage");
+    carbonAbove
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", 20)
+        .attr("y", 50)
+        .attr("fill", "white")
+        .text("above ground");
+
+
     carbonBelow
         .append("circle")
         .style("stroke", "white")
@@ -238,6 +295,25 @@ function drawSVG() {
         .attr("r", 100)
         .attr("cx", belowXposition)
         .attr("cy", belowYposition);
+
+    dragHandler(carbonBelow);
+
+    carbonBelow
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", 50)
+        .attr("y", 25)
+        .attr("fill", "white")
+        .text("Carbon Storage");
+    carbonBelow
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", 50)
+        .attr("y", 70)
+        .attr("fill", "white")
+        .text("below ground");
 
 
 
@@ -312,17 +388,33 @@ function mapValue(number, inMin, inMax, outMin, outMax) {
     return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
 
-
-
 function dragged() {
 
-    console.log(this);
+    // console.log(this);
     console.log(d3.event);
 
     var current = d3.select(this);
     current
-        .attr("transform", () => `translate(${d3.event.x}, ${d3.event.y})`)
-    //.attr('cy', d3.event.y);
+        .transition()
+        .duration(200)
+        .ease(d3.easeLinear)
+        .attr("transform", () => `translate(${d3.event.x}, ${d3.event.y})`);
+    co2Xposition = d3.event.x;
+    co2Yposition = d3.event.y;
+
+    // .attr('cx', d3.event.x)
+    // .attr('cy', d3.event.y);
+    // .attr("cx", d3.event.x + deltaX)
+    // .attr("cy", d3.event.y + deltaY);
+}
+
+function rotateSVG(selector, degrees) {
+    const rotator = d3
+        .select(selector)
+        .transition()
+        .duration(3000)
+        .ease(d3.easeLinear)
+        .attr("transform", () => `rotate(${degrees})`);
 }
 
 
