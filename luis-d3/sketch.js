@@ -19,6 +19,8 @@ let belowMin = 350;
 let belowXposition = window.innerWidth - 800;
 let belowYposition = window.innerHeight - 800;
 
+// let dragHandler;
+
 
 function listenToTokens() {
     const { wsPort } = Osc();
@@ -72,8 +74,10 @@ function listenToTokens() {
         connectSVG('#dashyindicator2 line', normalizedXPos, normalizedYPos);
         connectSVG('#dashyindicator3 line', normalizedXPos, normalizedYPos);
 
+
     });
 }
+
 
 
 function drawSVG() {
@@ -95,6 +99,26 @@ function drawSVG() {
     const dashedline2 = svg.append("g").attr("id", "dashyindicator2");
     const dashedline3 = svg.append("g").attr("id", "dashyindicator3");
 
+    //const dragbubble = svg.append("g").attr("id", "dragindicator");
+
+
+    var dragHandler = d3.drag()
+        .on('drag', dragged)
+
+    // var circle = svg.append("circle")
+    // .attr("cx", 100)
+    // .attr("cy", 100)
+    // .attr('r', 50)
+    // .style("fill", "white");
+
+    //dragHandler(circle);
+
+    //dragged();
+
+
+
+
+
     let strokeDash = "5, 10";
     let strokeThickness = 2;
 
@@ -110,6 +134,9 @@ function drawSVG() {
         .attr("y1", co2Yposition)
         .attr("x2", 0)
         .attr("y2", 0);
+
+        //dragHandler(dashedline1);
+
 
     dashedline2
         .append("line")
@@ -177,15 +204,20 @@ function drawSVG() {
         .attr("cx", 0)
         .attr("cy", 0);
 
+    co2Xposition = 0;
+    co2Yposition = 0;
     co2Circle
         .append("circle")
         .style("stroke", "white")
         .style("stroke-width", 3)
         .style("fill", "url(#void-gradient)")
-
         .attr("r", 100)
         .attr("cx", co2Xposition)
         .attr("cy", co2Yposition);
+
+    dragHandler(co2Circle);
+
+
 
     carbonAbove
         .append("circle")
@@ -279,6 +311,20 @@ function scale(selector, rotation) {
 function mapValue(number, inMin, inMax, outMin, outMax) {
     return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
+
+
+
+function dragged() {
+
+    console.log(this);
+    console.log(d3.event);
+
+    var current = d3.select(this);
+    current
+        .attr("transform", () => `translate(${d3.event.x}, ${d3.event.y})`)
+    //.attr('cy', d3.event.y);
+}
+
 
 listenToTokens();
 drawSVG();
