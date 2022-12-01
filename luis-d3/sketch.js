@@ -412,7 +412,7 @@ function rotateSVG(selector, degrees) {
     const rotator = d3
         .select(selector)
         .transition()
-        .duration(3000)
+        .duration(1000)
         .ease(d3.easeLinear)
         .attr("transform", () => `rotate(${degrees})`);
 }
