@@ -72,6 +72,9 @@ function listenToTokens() {
         connectSVG('#dashyindicator2 line', normalizedXPos, normalizedYPos);
         connectSVG('#dashyindicator3 line', normalizedXPos, normalizedYPos);
 
+        rotateSVG('#rotatehot', HotspotValue);
+
+
     });
 }
 
@@ -86,6 +89,8 @@ function drawSVG() {
 
     const hotspot = svg.append("g").attr("id", "rainforest");
     const currentHotspot = hotspot.append("g").attr("id", "scalerainforest");
+    const rotateHot = hotspot.append("g").attr("id", "rotatehot");
+
 
     const co2Circle = svg.append("g").attr("id", "co2indicator");
     const carbonAbove = svg.append("g").attr("id", "aboveindicator");
@@ -139,19 +144,6 @@ function drawSVG() {
 
     hotspot
         .append("circle")
-        .style("stroke", "white")
-        .style("stroke-width", 4)
-        .style("fill", "transparent")
-        .attr("stroke-dasharray", "5, 15")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-dashoffset", "15%")
-
-        .attr("r", maxSize)
-        .attr("cx", 0)
-        .attr("cy", 0);
-
-    hotspot
-        .append("circle")
         .style("fill", "black")
         .attr("opacity", "40%")
         .attr("r", 150)
@@ -177,6 +169,19 @@ function drawSVG() {
         .attr("cx", 0)
         .attr("cy", 0);
 
+    rotateHot
+        .append("circle")
+        .style("stroke", "white")
+        .style("stroke-width", 4)
+        .style("fill", "transparent")
+        .attr("stroke-dasharray", "30, 80")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-dashoffset", "38%")
+
+        .attr("r", maxSize)
+        .attr("cx", 0)
+        .attr("cy", 0);
+
     co2Circle
         .append("circle")
         .style("stroke", "white")
@@ -187,6 +192,23 @@ function drawSVG() {
         .attr("cx", co2Xposition)
         .attr("cy", co2Yposition);
 
+    co2Circle
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", co2Xposition)
+        .attr("y", co2Yposition - 40)
+        .attr("fill", "white")
+        .text("CO2");
+    co2Circle
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", co2Xposition)
+        .attr("y", co2Yposition)
+        .attr("fill", "white")
+        .text("in the air");
+
     carbonAbove
         .append("circle")
         .style("stroke", "white")
@@ -196,6 +218,22 @@ function drawSVG() {
         .attr("r", 100)
         .attr("cx", aboveXposition)
         .attr("cy", aboveYposition);
+    carbonAbove
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", aboveXposition)
+        .attr("y", aboveYposition - 40)
+        .attr("fill", "white")
+        .text("CO2 Storage");
+    carbonAbove
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", aboveXposition)
+        .attr("y", aboveYposition)
+        .attr("fill", "white")
+        .text("above ground");
 
     carbonBelow
         .append("circle")
@@ -206,6 +244,23 @@ function drawSVG() {
         .attr("r", 100)
         .attr("cx", belowXposition)
         .attr("cy", belowYposition);
+
+    carbonBelow
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", belowXposition)
+        .attr("y", belowYposition-40)
+        .attr("fill", "white")
+        .text("Carbon Storage");
+    carbonBelow
+        .append("text")
+        .attr("font-size", 30)
+        .attr("text-anchor", "middle")
+        .attr("x", belowXposition)
+        .attr("y", belowYposition)
+        .attr("fill", "white")
+        .text("below ground");
 
 
 
@@ -274,6 +329,15 @@ function scale(selector, rotation) {
         .duration(50)
         .ease(d3.easeLinear)
         .attr("r", rotation);
+}
+
+function rotateSVG(selector, degrees) {
+    const rotator = d3
+        .select(selector)
+        .transition()
+        .duration(300)
+        .ease(d3.easeLinear)
+        .attr("transform", () => `rotate(${degrees})`);
 }
 
 function mapValue(number, inMin, inMax, outMin, outMax) {
